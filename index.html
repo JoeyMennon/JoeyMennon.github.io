@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portfolio — Joel Pérez Rey</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:        #0a0a0f;
+      --surface:   #111118;
+      --border:    #1e1e2e;
+      --accent:    #00e5ff;
+      --accent2:   #7c3aed;
+      --text:      #e2e8f0;
+      --muted:     #64748b;
+      --card:      #13131c;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Syne', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── Noise overlay ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 999;
+      opacity: .4;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.25rem 3rem;
+      background: rgba(10,10,15,.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+    }
+    .logo {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .9rem;
+      color: var(--accent);
+      letter-spacing: .05em;
+    }
+    .logo span { color: var(--muted); }
+    nav ul { list-style: none; display: flex; gap: 2rem; }
+    nav ul a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: .85rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      transition: color .25s;
+    }
+    nav ul a:hover { color: var(--accent); }
+
+    /* ── Hero ── */
+    #hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 8rem 3rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 50%, black, transparent);
+      opacity: .4;
+    }
+    .hero-glow {
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,229,255,.07) 0%, transparent 70%);
+      top: 10%; left: -10%;
+      pointer-events: none;
+    }
+    .hero-glow2 {
+      position: absolute;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(124,58,237,.1) 0%, transparent 70%);
+      bottom: 10%; right: 5%;
+      pointer-events: none;
+    }
+
+    .hero-content { position: relative; max-width: 800px; }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: .5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem;
+      color: var(--accent);
+      border: 1px solid rgba(0,229,255,.25);
+      border-radius: 4px;
+      padding: .3rem .7rem;
+      margin-bottom: 2rem;
+      animation: fadeUp .6s ease both;
+    }
+    .hero-tag::before { content: '▶'; font-size: .6rem; }
+
+    h1 {
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 800;
+      line-height: 1;
+      animation: fadeUp .6s .1s ease both;
+    }
+    h1 .line2 {
+      display: block;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-sub {
+      margin-top: 1.5rem;
+      color: var(--muted);
+      font-size: 1.1rem;
+      max-width: 540px;
+      line-height: 1.7;
+      animation: fadeUp .6s .2s ease both;
+    }
+
+    .hero-cta {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      margin-top: 2.5rem;
+      animation: fadeUp .6s .3s ease both;
+    }
+    .btn {
+      padding: .75rem 1.75rem;
+      border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .85rem;
+      letter-spacing: .05em;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all .25s;
+      border: none;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #000;
+    }
+    .btn-primary:hover { background: #33ecff; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,229,255,.25); }
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+    /* ── Terminal card ── */
+    .terminal {
+      position: absolute;
+      right: 3rem; top: 50%;
+      transform: translateY(-50%);
+      width: 340px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0,0,0,.6);
+      animation: fadeUp .6s .4s ease both;
+      display: none;
+    }
+    @media(min-width: 1100px) { .terminal { display: block; } }
+    .terminal-bar {
+      background: var(--surface);
+      padding: .6rem 1rem;
+      display: flex; align-items: center; gap: .5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .dot-r { background: #ff5f57; }
+    .dot-y { background: #ffbd2e; }
+    .dot-g { background: #28c940; }
+    .terminal-title {
+      flex: 1; text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .7rem; color: var(--muted);
+    }
+    .terminal-body { padding: 1rem; font-family: 'JetBrains Mono', monospace; font-size: .78rem; line-height: 1.9; }
+    .t-prompt { color: var(--accent); }
+    .t-cmd { color: var(--text); }
+    .t-out { color: var(--muted); }
+    .t-ok { color: #28c940; }
+    .t-cursor {
+      display: inline-block; width: 8px; height: 14px;
+      background: var(--accent);
+      animation: blink 1s step-end infinite;
+      vertical-align: middle;
+    }
+
+    /* ── Sections common ── */
+    section { padding: 6rem 3rem; }
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem;
+      color: var(--accent);
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      margin-bottom: 3rem;
+    }
+    .section-title span {
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+
+    /* ── About ── */
+    #sobre {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 4rem; align-items: center;
+    }
+    @media(max-width:768px) { .about-grid { grid-template-columns: 1fr; } }
+    .about-text p {
+      color: var(--muted);
+      line-height: 1.8;
+      margin-bottom: 1rem;
+      font-size: 1.05rem;
+    }
+    .about-text p strong { color: var(--text); }
+    .about-badges {
+      display: flex; flex-wrap: wrap; gap: .6rem;
+      margin-top: 1.5rem;
+    }
+    .badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .7rem;
+      padding: .3rem .7rem;
+      border-radius: 4px;
+      background: rgba(0,229,255,.08);
+      border: 1px solid rgba(0,229,255,.2);
+      color: var(--accent);
+    }
+    .stat-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      transition: border-color .25s;
+    }
+    .stat-card:hover { border-color: var(--accent); }
+    .stat-number {
+      font-size: 2rem; font-weight: 800;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .stat-desc { font-size: .85rem; color: var(--muted); margin-top: .25rem; }
+
+    /* ── Skills ── */
+    #habilidades { max-width: 1100px; margin: 0 auto; }
+    .skills-cols {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .skill-group {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+      transition: border-color .3s, transform .3s;
+    }
+    .skill-group:hover { border-color: var(--accent); transform: translateY(-4px); }
+    .skill-group-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .75rem;
+      letter-spacing: .1em;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+    .skill-item {
+      margin-bottom: .85rem;
+    }
+    .skill-header {
+      display: flex; justify-content: space-between;
+      font-size: .85rem;
+      margin-bottom: .35rem;
+    }
+    .skill-pct { color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: .75rem; }
+    .skill-bar { height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
+    .skill-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 2px;
+      transform-origin: left;
+      animation: growBar 1.2s ease both;
+    }
+
+    /* ── Languages ── */
+    .lang-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1rem; margin-top: 1.5rem;
+    }
+    .lang-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1rem;
+      text-align: center;
+      transition: border-color .25s, transform .25s;
+    }
+    .lang-card:hover { border-color: var(--accent2); transform: translateY(-3px); }
+    .lang-flag { font-size: 2rem; margin-bottom: .5rem; }
+    .lang-name { font-weight: 600; margin-bottom: .25rem; }
+    .lang-level {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .7rem;
+      color: var(--accent);
+      background: rgba(0,229,255,.08);
+      border: 1px solid rgba(0,229,255,.2);
+      border-radius: 4px;
+      padding: .15rem .5rem;
+      display: inline-block;
+    }
+
+    /* ── Contact ── */
+    #contacto {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      text-align: center;
+    }
+    .contact-inner { max-width: 600px; margin: 0 auto; }
+    .contact-inner p { color: var(--muted); line-height: 1.7; margin-bottom: 2.5rem; }
+    .contact-links {
+      display: flex; justify-content: center; flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .contact-link {
+      display: flex; align-items: center; gap: .5rem;
+      padding: .75rem 1.5rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .8rem;
+      transition: all .25s;
+    }
+    .contact-link:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+    .contact-link svg { width: 16px; height: 16px; }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .7rem;
+      border-top: 1px solid var(--border);
+    }
+    footer span { color: var(--accent); }
+
+    /* ── Divider ── */
+    .line-divider {
+      width: 100%; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 2rem 0;
+    }
+
+    /* ── Animations ── */
+    @keyframes fadeUp {
+      from { opacity:0; transform: translateY(24px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+    @keyframes growBar {
+      from { width: 0; }
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo"><span>//</span> joel_perez.sh</div>
+  <ul>
+    <li><a href="#sobre">Sobre mí</a></li>
+    <li><a href="#habilidades">Habilidades</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+
+  <div class="hero-content">
+    <div class="hero-tag">Disponible para oportunidades</div>
+    <h1>
+      Hola, soy<br>
+      <span class="line2">Joel Pérez Rey</span>
+    </h1>
+    <p class="hero-sub">
+      Técnico en <strong>ASIR</strong> — Administración de Sistemas
+      Informáticos en Red. Apasionado por las redes, la ciberseguridad
+      y la infraestructura IT.
+    </p>
+    <div class="hero-cta">
+      <a href="#contacto" class="btn btn-primary">Contactar</a>
+      <a href="#habilidades" class="btn btn-outline">Ver habilidades</a>
+    </div>
+  </div>
+
+  <!-- Terminal decoration -->
+  <div class="terminal">
+    <div class="terminal-bar">
+      <div class="dot dot-r"></div>
+      <div class="dot dot-y"></div>
+      <div class="dot dot-g"></div>
+      <span class="terminal-title">bash — ~</span>
+    </div>
+    <div class="terminal-body">
+      <div><span class="t-prompt">➜ ~ </span><span class="t-cmd">whoami</span></div>
+      <div class="t-out">joel@asir</div>
+      <br>
+      <div><span class="t-prompt">➜ ~ </span><span class="t-cmd">cat perfil.txt</span></div>
+      <div class="t-out">ASIR · Ciclo Superior</div>
+      <div class="t-out">Redes · Linux · Seguridad</div>
+      <br>
+      <div><span class="t-prompt">➜ ~ </span><span class="t-cmd">ping google.com</span></div>
+      <div class="t-ok">64 bytes: icmp_seq=1 ttl=55</div>
+      <div class="t-ok">64 bytes: icmp_seq=2 ttl=55</div>
+      <br>
+      <div><span class="t-prompt">➜ ~ </span><span class="t-cmd">./find_job.sh</span><span class="t-cursor"></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE MÍ -->
+<section id="sobre">
+  <div class="about-grid" style="max-width:1100px; margin:0 auto;">
+    <div class="about-text">
+      <div class="section-label">01 — Sobre mí</div>
+      <h2 class="section-title">¿Quién <span>soy?</span></h2>
+      <p>
+        Soy un estudiante de <strong>CFGS ASIR</strong> con gran interés en
+        la administración de sistemas, redes y ciberseguridad. Me gusta
+        entender cómo funciona la infraestructura por dentro y resolver
+        problemas técnicos de forma eficiente.
+      </p>
+      <p>
+        Además de la informática, dedico tiempo a mejorar mi nivel de
+        <strong>inglés</strong> (actualmente preparando el C1) y a aprender
+        <strong>japonés</strong>, idioma que llevo estudiando por mi cuenta y
+        del que ya cuento con el nivel A1.
+      </p>
+      <p>
+        Busco incorporarme al mundo laboral IT y seguir creciendo
+        profesionalmente en entornos de sistemas y redes.
+      </p>
+      <div class="about-badges">
+        <span class="badge">Linux</span>
+        <span class="badge">Networking</span>
+        <span class="badge">Virtualización</span>
+        <span class="badge">Active Directory</span>
+        <span class="badge">Ciberseguridad</span>
+        <span class="badge">Scripting</span>
+      </div>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-number">ASIR</div>
+        <div class="stat-desc">Ciclo Superior en curso</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">C1</div>
+        <div class="stat-desc">Meta inglés en preparación</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">A1</div>
+        <div class="stat-desc">Japonés certificado</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">2025</div>
+        <div class="stat-desc">Próxima graduación</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HABILIDADES -->
+<section id="habilidades" style="max-width:1100px; margin:0 auto;">
+  <div class="section-label">02 — Habilidades</div>
+  <h2 class="section-title">Stack <span>técnico</span></h2>
+
+  <div class="skills-cols">
+
+    <div class="skill-group">
+      <div class="skill-group-title">// Sistemas</div>
+      <div class="skill-item">
+        <div class="skill-header"><span>Linux (Ubuntu/Debian)</span><span class="skill-pct">85%</span></div>
+        <div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-header"><span>Windows Server</span><span class="skill-pct">80%</span></div>
+        <div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-header"><span>Active Directory</span><span class="skill-pct">75%</span></div>
+        <div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-header"><span>Virtualización (VMware/VBox)</span><span class="skill-pct">80%</span></div>
+        <div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-group-title">// Redes</div>
+      <div class="skill-item">
+        <div class="skill-header"><span>TCP/IP · Subnetting</span><span class="skill-pct">85%</span></div>
+        <div class="skill-bar"><div class="skill-fill" style="width:85%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-header"><span>Cisco (Packet Tracer)</span><span class="skill-pct">70%</span></div>
+        <div class="skill-bar"><div class="skill-fill" style="width:70%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-header"><span>DNS / DHCP / HTTP</span><span class="skill-pct">80%</span></div>
+        <div class="skill-bar"><div class="skill-fill" style="width:80%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-header"><span>Firewall / VPN</span><span class="skill-pct">65%</span></div>
+        <div class="skill-bar"><div class="skill-fill" style="width:65%"></div></div>
+      </div>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-group-title">// Scripting & Dev</div>
+      <div class="skill-item">
+        <div class="skill-header"><span>Bash / Shell</span><span class="skill-pct">75%</span></div>
+        <div class="skill-bar"><div class="skill-fill" style="width:75%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-header"><span>PowerShell</span><span class="skill-pct">65%</span></div>
+        <div class="skill-bar"><div class="skill-fill" style="width:65%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-header"><span>Python (básico)</span><span class="skill-pct">50%</span></div>
+        <div class="skill-bar"><div class="skill-fill" style="width:50%"></div></div>
+      </div>
+      <div class="skill-item">
+        <div class="skill-header"><span>Git</span><span class="skill-pct">60%</span></div>
+        <div class="skill-bar"><div class="skill-fill" style="width:60%"></div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Idiomas -->
+  <div style="margin-top: 4rem;">
+    <div class="section-label">03 — Idiomas</div>
+    <h2 class="section-title">Comunicación <span>global</span></h2>
+    <div class="lang-grid">
+      <div class="lang-card">
+        <div class="lang-flag">🇪🇸</div>
+        <div class="lang-name">Español</div>
+        <div class="lang-level">Nativo</div>
+      </div>
+      <div class="lang-card">
+        <div class="lang-flag">🇬🇧</div>
+        <div class="lang-name">Inglés</div>
+        <div class="lang-level">C1 — En preparación</div>
+      </div>
+      <div class="lang-card">
+        <div class="lang-flag">🇯🇵</div>
+        <div class="lang-name">Japonés</div>
+        <div class="lang-level">A1 — En progreso</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section id="contacto">
+  <div class="contact-inner">
+    <div class="section-label">04 — Contacto</div>
+    <h2 class="section-title">¿Hablamos?</h2>
+    <p>
+      Estoy abierto a prácticas, ofertas de trabajo junior y
+      colaboraciones en el área de sistemas y redes.
+      No dudes en contactarme.
+    </p>
+    <div class="contact-links">
+      <a href="mailto:perezreyjoel001@gmail.com" class="contact-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        perezreyjoel001@gmail.com
+      </a>
+      <a href="https://www.linkedin.com/in/joel-pérez-rey-90b3b1211" target="_blank" class="contact-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        LinkedIn
+      </a>
+      <a href="https://github.com/JoeyMennon" target="_blank" class="contact-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>//</span> Hecho con HTML + CSS &nbsp;·&nbsp; Joel Pérez Rey &nbsp;·&nbsp; <span>2025</span>
+</footer>
+
+</body>
+</html>
